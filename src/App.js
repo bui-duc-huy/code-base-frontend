@@ -3,6 +3,7 @@ import routes from './config/routes'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import Login from './pages/Login'
 import { Menu } from './components/Menu'
+import PageNotFound from './pages/PageNotFound'
 
 function App() {
   const [isAuth, setAuth] = useState(!!window.localStorage.getItem('token'))
@@ -21,6 +22,10 @@ function App() {
                   key={route.title}
                   {...route}
                   component={props1 => {
+                    const { pathname } = props1.location
+                    if (routes.every((route) => route.path != pathname)) {
+                      return <PageNotFound></PageNotFound>
+                    }
                     const MyComponent = React.lazy(() =>
                       import(`./pages/${route.component}`)
                     )
